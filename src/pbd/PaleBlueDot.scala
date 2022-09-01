@@ -23,9 +23,15 @@ object PaleBlueDot {
    */
   def getCountryCode(countriesFilename: String, countryName: String): String = {
     val countriesFile: BufferedSource = Source.fromFile(countriesFilename)
-
-
-    ""
+    val countryform: String = countryName.toLowerCase()
+    var holder: String = ""
+    for (line <- countriesFile.getLines){
+      val lowercc: String = line.toLowerCase().dropRight(3)
+      if (lowercc == countryform){
+        holder = line.toLowerCase()takeRight(2)
+      }
+    }
+    holder
   }
 
 
@@ -41,9 +47,20 @@ object PaleBlueDot {
    * @return The average population of cities in the given country
    */
   def averagePopulation(countriesFilename: String, citiesFilename: String, countryName: String): Double = {
-
-    0.0
+    val codec: String = getCountryCode(countriesFilename, countryName)
+    val countrycities: BufferedSource = Source.fromFile(citiesFilename)
+    var counter: Int = 0
+    var enumerate: Int = 0
+    for (line <- countrycities.getLines){
+      val split = line.split(',')
+      if (split(0) == codec) {
+        counter += split(3).toInt
+        enumerate += 1
+      }
+    }
+    counter / enumerate
   }
+
 
 
   /**
