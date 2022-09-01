@@ -1,7 +1,10 @@
 package pbd
 
+import scalafx.stage.Modality.None
+
 import java.awt.Desktop
 import java.net.URI
+import scala.collection.mutable.ArrayBuffer
 import scala.io.{BufferedSource, Source}
 
 object PaleBlueDot {
@@ -28,7 +31,7 @@ object PaleBlueDot {
     for (line <- countriesFile.getLines){
       val lowercc: String = line.toLowerCase().dropRight(3)
       if (lowercc == countryform){
-        holder = line.toLowerCase()takeRight(2)
+        holder = line.toLowerCase().takeRight(2)
       }
     }
     holder
@@ -49,16 +52,21 @@ object PaleBlueDot {
   def averagePopulation(countriesFilename: String, citiesFilename: String, countryName: String): Double = {
     val codec: String = getCountryCode(countriesFilename, countryName)
     val countrycities: BufferedSource = Source.fromFile(citiesFilename)
-    var counter: Int = 0
-    var enumerate: Int = 0
+    var counter: Double = 0
+    var enumerate: Double = 0
     for (line <- countrycities.getLines){
       val split = line.split(',')
       if (split(0) == codec) {
-        counter += split(3).toInt
+        counter += split(3).toDouble
         enumerate += 1
       }
     }
-    counter / enumerate
+    val finalll: Double = (counter / enumerate)
+    if (finalll.isNaN) {
+      0
+    } else {
+      finalll
+    }
   }
 
   /**
@@ -79,11 +87,17 @@ object PaleBlueDot {
   def cityPopulations(countriesFilename: String, citiesFilename: String, countryName: String, regionCode: String): Map[String, Int] = {
     val codec2: String = getCountryCode(countriesFilename, countryName)
     val citylist: BufferedSource = Source.fromFile(citiesFilename)
-    val citymap = Map.empty
-    for (line <- citylist.getLines){
+    var citymap = Map.empty[String, Int]
+    val regioncheck = ArrayBuffer.empty
+    for (line <- citylist.getLines) {
       val split = line.split(',')
-      if (split(0) == codec2){
-        citymap += (split(1) -> split(3))
+      if (split(0) == codec2) {
+        if (regioncheck.contains(regionCode)) {
+          citymap = citymap
+        } else {
+          citymap += (split(1) -> split(3).toInt)
+          regioncheck += split(2)
+        }
       }
     }
     citymap
