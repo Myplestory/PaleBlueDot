@@ -1,6 +1,7 @@
 package tests
 
 import org.scalatest._
+import pbd.PaleBlueDot
 
 class Task3 extends FunSuite {
 
@@ -11,7 +12,10 @@ class Task3 extends FunSuite {
     val testCases: Map[String, Double] = Map(
       "Andorra" ->
     )
-
+    for ((input, expectedOutput) <- testCases) {
+      val computedOutput: Map = PaleBlueDot.cityPopulations(countriesFile,citiesFilename,input,regionCode)
+      assert(computedOutput == expectedOutput,input + " -> " + computedOutput)
+    }
   }
 
 
