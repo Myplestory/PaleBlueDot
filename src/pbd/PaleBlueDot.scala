@@ -61,8 +61,6 @@ object PaleBlueDot {
     counter / enumerate
   }
 
-
-
   /**
    * Task 3
    */
@@ -79,8 +77,16 @@ object PaleBlueDot {
    * @return A Map containing the name and population of every city in the given country
    */
   def cityPopulations(countriesFilename: String, citiesFilename: String, countryName: String, regionCode: String): Map[String, Int] = {
-
-    Map()
+    val codec2: String = getCountryCode(countriesFilename, countryName)
+    val citylist: BufferedSource = Source.fromFile(citiesFilename)
+    val citymap = Map.empty
+    for (line <- citylist.getLines){
+      val split = line.split(',')
+      if (split(0) == codec2){
+        citymap += (split(1) -> split(3))
+      }
+    }
+    citymap
   }
 
 
