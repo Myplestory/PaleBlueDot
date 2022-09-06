@@ -88,19 +88,21 @@ object PaleBlueDot {
     val codec2: String = getCountryCode(countriesFilename, countryName)
     val citylist: BufferedSource = Source.fromFile(citiesFilename)
     var citymap = Map.empty[String, Int]
-    val regioncheck = ArrayBuffer.empty
     for (line <- citylist.getLines) {
       val split = line.split(',')
       if (split(0) == codec2) {
-        if (regioncheck.contains(regionCode)) {
-          citymap = citymap
-        } else {
+        if (split(2) == regionCode) {
           citymap += (split(1) -> split(3).toInt)
-          regioncheck += split(2)
         }
       }
     }
-    citymap
+    if (citymap.isEmpty) {
+      println("No such city in " + countryName + " with the area code " + regionCode)
+      citymap
+    }
+    else {
+      citymap
+    }
   }
 
 
