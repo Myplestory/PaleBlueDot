@@ -115,7 +115,7 @@ object PaleBlueDot {
    * @return All city names in given country with a population > the average populations of cities in that country
    */
   def aboveAverageCities(countriesFilename: String, citiesFilename: String, countryName: String): List[String] = {
-    var citylist = ListBuffer.empty
+    var citylist = new ListBuffer[String]()
     val avgpop: Double = averagePopulation(countriesFilename: String, citiesFilename: String, countryName: String)
     val cityreader: BufferedSource = Source.fromFile(citiesFilename)
     for (line <- cityreader.getLines) {

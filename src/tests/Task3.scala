@@ -46,5 +46,15 @@ class Task3 extends FunSuite {
     }
   }
 
+  test("test 5(task3pt2) - Correct country") {
+    val testCases: Map[String, List[String]] = Map(
+      "Andorra" -> List("les escaldes")
+    )
+    for ((input, expectedOutput) <- testCases) {
+      val computedOutput: List[String] = PaleBlueDot.aboveAverageCities(countriesFile, citiesFilename, input)
+      assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
+    }
+  }
+
 
 }
