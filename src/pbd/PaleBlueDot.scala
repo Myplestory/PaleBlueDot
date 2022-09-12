@@ -6,6 +6,7 @@ import java.awt.Desktop
 import java.net.URI
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.io.{BufferedSource, Source}
+import scala.math._
 
 object PaleBlueDot {
 
@@ -150,9 +151,40 @@ object PaleBlueDot {
    *         a single city
    */
   def closestCity(citiesFilename: String, location: List[Double]): List[String] = {
-    List("Country Code", "City Name", "Region")
+    val openedcityfile: BufferedSource = Source.fromFile(citiesFilename)
+    // Holder variable (Checking for distance)
+    val holder: Double = 100000000.0
+    var finallist: List[String] = List()
+    for (line <- openedcityfile.getLines) {
+      val splitted = line.split(',')
+      val lat2: Double = splitted(4).toDouble
+      val lon2: Double = splitted(5).toDouble
+      val checker: Unit = GreaterCircle(location(0), lat2, location(1), lon2)
+      if (checker < holder) {
+
+      }
+    }
   }
 
+  // Greater circle method
+  def GreaterCircle(lat1: Double, lat2: Double, lon1: Double, lon2: Double): Unit = {
+    val r = 6371000.0
+    val φ1: Double = (lat1 * math.Pi) / 180.0
+    println("φ1 ->" + φ1)
+    val φ2: Double = (lat2 * Pi / 180.0)
+    println("φ2 ->" + φ1)
+    val Δφ: Double = (lat2 - lat1) * math.Pi / 180;
+    println("Δφ - >" + Δφ)
+    val Δλ: Double = (lon2 - lon1) * math.Pi / 180;
+    println("Δλ -> " + Δλ)
+    val aa = math.sin(Δφ / 2) * math.sin(Δφ / 2) +
+      math.cos(φ1) * math.cos(φ2) *
+        math.sin(Δλ / 2) * math.sin(Δλ / 2);
+    println(aa)
+    val cc = 2 * math.atan2(math.sqrt(aa), math.sqrt(1 - aa))
+    println(cc)
+    val dd = (r * cc)
+  }
 
   /**
    * Helper Method

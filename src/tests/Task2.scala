@@ -8,7 +8,29 @@ class Task2 extends FunSuite {
   val countriesFile: String = "data/countries.txt"
   val citiesFilename: String = "data/cities.csv"
 
-  test("test 1 - countries that have proper capitalization") {
+  test("test 1 - one city in the country") {
+    val testCases: Map[String, Double] = Map(
+      "Aruba" -> 29998
+    )
+    for ((input, expectedOutput) <- testCases) {
+      val computedOutput: Double = PaleBlueDot.averagePopulation(countriesFile, citiesFilename, input)
+      assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
+    }
+  }
+
+  // have to create epsilon for double tolerance
+  test("test 2 - Double tolerance / Off by 1") {
+    val epsilon: Double = 0.1
+    val testCases: Map[String, Double] = Map(
+      "Andorra" -> 8409.51
+    )
+    for ((input, expectedOutput) <- testCases) {
+      val computedOutput: Double = PaleBlueDot.averagePopulation(countriesFile, citiesFilename, input)
+      assert(Math.abs(computedOutput - expectedOutput) < epsilon)
+    }
+  }
+
+  test("test 3 - Requires exact capitalization") {
     val testCases: Map[String, Double] = Map(
       "Andorra" -> 8409.5,
     )
@@ -17,19 +39,20 @@ class Task2 extends FunSuite {
       assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
     }
   }
-  test("test 2 - countries that have wrong capitalization") {
+  test("test 3 - Requires exact capitalization") {
     val testCases: Map[String, Double] = Map(
-      "AnDoRra" -> 8409.5,
+      "Andorra" -> 8409.5,
     )
     for ((input, expectedOutput) <- testCases) {
       val computedOutput: Double = PaleBlueDot.averagePopulation(countriesFile, citiesFilename, input)
       assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
     }
   }
-  test("test 3 - not real countries/not in data file") {
-    val testCases: Map[String, Double] = Map(
-      "" -> 0.0,
-      "And orra" -> 0.0,
+
+  // Tests if returned value is result of integer division
+  test("test 3 - Int Division") {
+    val testCases: Map[String, Int] = Map(
+      "Andorra" -> 8409,
     )
     for ((input, expectedOutput) <- testCases) {
       val computedOutput: Double = PaleBlueDot.averagePopulation(countriesFile, citiesFilename, input)
@@ -37,3 +60,7 @@ class Task2 extends FunSuite {
     }
   }
 }
+
+
+
+
