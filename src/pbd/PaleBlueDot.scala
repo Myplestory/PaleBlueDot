@@ -1,6 +1,5 @@
 package pbd
 
-import scalafx.stage.Modality.None
 
 import java.awt.Desktop
 import java.net.URI
@@ -50,24 +49,18 @@ object PaleBlueDot {
    * @param countryName       The name of the country with any mix of upper/lower-case
    * @return The average population of cities in the given country
    */
+
   def averagePopulation(countriesFilename: String, citiesFilename: String, countryName: String): Double = {
     val codec: String = getCountryCode(countriesFilename, countryName)
     val countrycities: BufferedSource = Source.fromFile(citiesFilename)
-    var counter: Double = 0
-    var enumerate: Double = 0
-    for (line <- countrycities.getLines){
-      val split = line.split(',')
-      if (split(0) == codec) {
-        counter += split(3).toDouble
-        enumerate += 1
+    var poplist: List[Double] = List()
+    for (line <- countrycities.getLines) {
+      val splitt = line.split(',')
+      if (splitt(0) == codec) {
+        poplist = poplist :+ splitt(3).toDouble
       }
     }
-    val finalll: Double = (counter / enumerate)
-    if (finalll.isNaN) {
-      0
-    } else {
-      finalll
-    }
+    poplist.foldLeft(0.0)(_+_) / poplist.length.toDouble
   }
 
   /**
@@ -150,41 +143,6 @@ object PaleBlueDot {
    *         exactly as they appear in the cities file (ie. the List should have exactly 3 values to return
    *         a single city
    */
-  def closestCity(citiesFilename: String, location: List[Double]): List[String] = {
-    val openedcityfile: BufferedSource = Source.fromFile(citiesFilename)
-    // Holder variable (Checking for distance)
-    val holder: Double = 100000000.0
-    var finallist: List[String] = List()
-    for (line <- openedcityfile.getLines) {
-      val splitted = line.split(',')
-      val lat2: Double = splitted(4).toDouble
-      val lon2: Double = splitted(5).toDouble
-      val checker: Unit = GreaterCircle(location(0), lat2, location(1), lon2)
-      if (checker < holder) {
-
-      }
-    }
-  }
-
-  // Greater circle method
-  def GreaterCircle(lat1: Double, lat2: Double, lon1: Double, lon2: Double): Unit = {
-    val r = 6371000.0
-    val φ1: Double = (lat1 * math.Pi) / 180.0
-    println("φ1 ->" + φ1)
-    val φ2: Double = (lat2 * Pi / 180.0)
-    println("φ2 ->" + φ1)
-    val Δφ: Double = (lat2 - lat1) * math.Pi / 180;
-    println("Δφ - >" + Δφ)
-    val Δλ: Double = (lon2 - lon1) * math.Pi / 180;
-    println("Δλ -> " + Δλ)
-    val aa = math.sin(Δφ / 2) * math.sin(Δφ / 2) +
-      math.cos(φ1) * math.cos(φ2) *
-        math.sin(Δλ / 2) * math.sin(Δλ / 2);
-    println(aa)
-    val cc = 2 * math.atan2(math.sqrt(aa), math.sqrt(1 - aa))
-    println(cc)
-    val dd = (r * cc)
-  }
 
   /**
    * Helper Method
