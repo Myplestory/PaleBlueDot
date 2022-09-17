@@ -10,26 +10,36 @@ class Task3 extends FunSuite {
 
   // RETURNS MAP FOR ALL CITIES IN A COUNTRY
 
-  test("test 1 - Country names are properly capitalized") {
+  test("test 1 - Country names are properly capitalized / map") {
     val testCases: Map[String, Map[String, Int]] = Map(
-      "Afghanistan" -> Map("asadabad" -> 48400, "asmar" -> 15708),
+      "United Arab Emirates" -> Map("abu dhabi" -> 603687
+      )
     )
     for ((input, expectedOutput) <- testCases) {
-      val computedOutput: Map[String, Int] = PaleBlueDot.cityPopulations(countriesFile,citiesFilename,input,"34")
-      assert(computedOutput == expectedOutput,input + " -> " + computedOutput)
-    }
-  }
-
-  test("test 2 - Country names are incorrectly capitalized") {
-    val testCases: Map[String, Map[String, Int]] = Map(
-      "AfGHANIstan" -> Map("asadabad" -> 48400, "asmar" -> 15708),
-    )
-    for ((input, expectedOutput) <- testCases) {
-      val computedOutput: Map[String, Int] = PaleBlueDot.cityPopulations(countriesFile, citiesFilename, input, "34")
+      val computedOutput: Map[String, Int] = PaleBlueDot.cityPopulations(countriesFile, citiesFilename, input, "01")
       assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
     }
   }
-  test("test 3 - Incorrect/nonexistent countries") {
+  test("test 2 - Wrong area code") {
+    val testCases: Map[String, Map[String, Int]] = Map(
+      "United Arab Emirates" -> Map()
+    )
+    for ((input, expectedOutput) <- testCases) {
+      val computedOutput: Map[String, Int] = PaleBlueDot.cityPopulations(countriesFile, citiesFilename, input, "011")
+      assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
+    }
+  }
+
+  test("test 3 - Only one city in country to map") {
+    val testCases: Map[String, Map[String, Int]] = Map(
+      "Aruba" -> Map("oranjestad" -> 29998)
+    )
+    for ((input, expectedOutput) <- testCases) {
+      val computedOutput: Map[String, Int] = PaleBlueDot.cityPopulations(countriesFile, citiesFilename, input, "00")
+      assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
+    }
+  }
+  test("test 4 - Incorrect/nonexistent countries") {
     val testCases: Map[String, Map[String, Int]] = Map(
       "AfGH ANIstan" -> Map()
     )
@@ -38,46 +48,15 @@ class Task3 extends FunSuite {
       assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
     }
   }
-  test("test 4 - Incorrect/nonexistent region code") {
-    val testCases: Map[String, Map[String, Int]] = Map(
-      "Afghanistan" -> Map()
-    )
-    for ((input, expectedOutput) <- testCases) {
-      val computedOutput: Map[String, Int] = PaleBlueDot.cityPopulations(countriesFile, citiesFilename, input, "ge")
-      assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
-    }
-  }
+  // RETURNS LIST FOR ALL CITIES IN A COUNTRY GREATER THAN AVG
 
-  // RETURN LIST OF CITY NAMES IN GIVEN COUNTRY ABOVE AVG POPULATION
-
-  test("test 5(task3pt2) - Correct country") {
+  test("test 5 - Returns list of greater than avg pop") {
     val testCases: Map[String, List[String]] = Map(
-      "Andorra" -> List("les escaldes")
+      "Aruba" -> List()
     )
     for ((input, expectedOutput) <- testCases) {
       val computedOutput: List[String] = PaleBlueDot.aboveAverageCities(countriesFile, citiesFilename, input)
       assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
     }
   }
-
-  test("test 6(task3pt2) - wrong capitalization country country") {
-    val testCases: Map[String, List[String]] = Map(
-      "AndoRRa" -> List("les escaldes")
-    )
-    for ((input, expectedOutput) <- testCases) {
-      val computedOutput: List[String] = PaleBlueDot.aboveAverageCities(countriesFile, citiesFilename, input)
-      assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
-    }
-  }
-  test("test 7(task3pt2) - Incorrect country") {
-    val testCases: Map[String, List[String]] = Map(
-      "And orr a" -> List()
-    )
-    for ((input, expectedOutput) <- testCases) {
-      val computedOutput: List[String] = PaleBlueDot.aboveAverageCities(countriesFile, citiesFilename, input)
-      assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
-    }
-  }
-
-
 }
