@@ -12,14 +12,14 @@ class Task3 extends FunSuite {
 
   test("test 1 - Country names are properly capitalized / map") {
     val testCases: Map[String, Map[String, Int]] = Map(
-      "United Arab Emirates" -> Map("abu dhabi" -> 603687
-      )
+      "United Arab Emirates" -> Map("abu dhabi" -> 603687)
     )
     for ((input, expectedOutput) <- testCases) {
       val computedOutput: Map[String, Int] = PaleBlueDot.cityPopulations(countriesFile, citiesFilename, input, "01")
       assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
     }
   }
+
   test("test 2 - Wrong area code") {
     val testCases: Map[String, Map[String, Int]] = Map(
       "United Arab Emirates" -> Map()
@@ -39,6 +39,16 @@ class Task3 extends FunSuite {
       assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
     }
   }
+  test("test 3.5 - Multiple cities mapped") {
+    val testCases: Map[String, Map[String, Int]] = Map(
+      "Antigua and Barbuda" -> Map("all saints" -> 2526, "liberta" -> 1668, "swetes" -> 727)
+    )
+    for ((input, expectedOutput) <- testCases) {
+      val computedOutput: Map[String, Int] = PaleBlueDot.cityPopulations(countriesFile, citiesFilename, input, "06")
+      assert(computedOutput == expectedOutput, input + " -> " + computedOutput)
+    }
+  }
+
   test("test 4 - Incorrect/nonexistent countries") {
     val testCases: Map[String, Map[String, Int]] = Map(
       "AfGH ANIstan" -> Map()

@@ -144,6 +144,49 @@ object PaleBlueDot {
    *         a single city
    */
 
+  def closestCity(citiesFilename: String, location: List[Double]): List[String] = {
+    val openedcityfile: BufferedSource = Source.fromFile(citiesFilename)
+    // Holder variable (Checking for distance)
+    var holder1: List[Double] = List()
+    var holder2: List[String] = List()
+    for (line <- openedcityfile.getLines.drop(1)) {
+      val linessplit = line.split(',')
+      val lat2: Double = linessplit(4).toDouble
+      val lon2: Double = linessplit(5).toDouble
+      val checker: Double = GreaterCircle(location.head, lat2, location.last, lon2)
+      if (holder1.isEmpty){
+        holder2 = holder2 :+ linessplit(0)
+        holder2 = holder2 :+ linessplit(1)
+        holder2 = holder2 :+ linessplit(2)
+        holder1 = holder1 :+ checker
+      }
+      else {
+        if (checker < holder1.head) {
+          holder2 = holder2.updated(0,linessplit(0))
+          holder2 = holder2.updated(1,linessplit(1))
+          holder2 = holder2.updated(2,linessplit(2))
+          holder1 = holder1.updated(0,checker)
+        }
+        else{
+        }
+      }
+    }
+    holder2
+  }
+  // Greater circle method
+  def GreaterCircle(lat1: Double, lat2: Double, lon1: Double, lon2: Double): Double = {
+    val r = 6371000.0
+    val phi1: Double = (lat1 * Math.PI) / 180.0
+    val phi2: Double = (lat2 * Math.PI) / 180.0
+    val deltaphi: Double = (lat2 - lat1) * Math.PI / 180
+    val deltalambda: Double = (lon2 - lon1) * Math.PI / 180
+    val aa = Math.sin(deltaphi / 2) * Math.sin(deltaphi / 2) +
+      Math.cos(phi1) * Math.cos(phi2) *
+        Math.sin(deltalambda / 2) * Math.sin(deltalambda / 2)
+    val cc = 2 * Math.atan2(Math.sqrt(aa), Math.sqrt(1 - aa))
+    r * cc
+  }
+
   /**
    * Helper Method
    *
